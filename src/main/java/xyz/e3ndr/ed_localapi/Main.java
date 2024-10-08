@@ -1,5 +1,6 @@
 package xyz.e3ndr.ed_localapi;
 
+import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +42,8 @@ public class Main {
         sFramework.startHttpServer();
 
         EliteDangerous.init(); // Init.
+
+        TrayHandler.notify("EDLA is running!", MessageType.INFO);
     }
 
     private static class DummyPlugin extends SoraPlugin {

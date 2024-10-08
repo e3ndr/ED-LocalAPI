@@ -1,5 +1,6 @@
 package xyz.e3ndr.ed_localapi;
 
+import java.awt.TrayIcon.MessageType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -83,7 +84,7 @@ public class EliteDangerous {
                     fileListeners.put("Journal", new LinkedList<>()); // Create the mapping.
                     findAndReadJournal();
 
-                    LOGGER.info("Files are being watched! Godspeed CMDR o7");
+                    LOGGER.info("Files are being watched! Fly safe CMDR o7");
                     isGameRunning = true;
 
                     for (GameListener listener : gameListeners) {
@@ -93,6 +94,8 @@ public class EliteDangerous {
                             t.printStackTrace(); // Swallow and move on.
                         }
                     }
+
+                    TrayHandler.notify("Fly safe CMDR o7", MessageType.INFO);
                 } else {
                     LOGGER.info("Game has been closed. Cleaning up resources.");
                     isGameRunning = false;

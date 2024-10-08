@@ -6,10 +6,13 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+
+import lombok.NonNull;
 
 public class TrayHandler {
     private static final Image IMAGE;
@@ -84,6 +87,14 @@ public class TrayHandler {
         if (tray != null) {
             tray.remove(icon);
         }
+    }
+
+    public static void notify(@NonNull String message, @NonNull MessageType type) {
+        if (icon == null) {
+            throw new IllegalStateException();
+        }
+
+        icon.displayMessage("EDLA", message, type);
     }
 
 }
