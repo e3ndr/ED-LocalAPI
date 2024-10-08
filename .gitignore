@@ -1,0 +1,21 @@
+.DS_Store
+
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+.settings/
+.metadata/
+.project
+.classpath
+
+# VSCode
+.vscode/settings.json
+
+# Common
+/target/
+
+# Misc
+*Test.java
+temp_*
