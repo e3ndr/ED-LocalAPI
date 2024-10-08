@@ -22,6 +22,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 //        FastLoggingFramework.setDefaultLevel(LogLevel.ALL);
 
+        TrayHandler.tryCreateTray();
+
         SoraFramework sFramework = new SoraLauncher()
             .setBindAddress(HOSTNAME)
             .setPort(PORT)
