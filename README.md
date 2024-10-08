@@ -2,6 +2,8 @@
 
 This application acts as a bridge between Elite Dangerous' file-based logs and web apps that want to integrate with the game.
 
+## Used by
+Nobody yet! Create an issue if you make a tool that integrates with EDLA :^)
 
 ## For users
 
