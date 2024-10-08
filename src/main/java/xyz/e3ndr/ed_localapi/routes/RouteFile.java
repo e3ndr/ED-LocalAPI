@@ -22,39 +22,52 @@ import lombok.SneakyThrows;
 import xyz.e3ndr.ed_localapi.EliteDangerous;
 import xyz.e3ndr.ed_localapi.EliteDangerous.ContentListener;
 
-public class RouteFile implements HttpProvider, WebsocketProvider {
+public class RouteFile extends Helper implements HttpProvider, WebsocketProvider {
+
+    @HttpEndpoint(uri = "/files")
+    public HttpResponse onListFiles(SoraHttpSession session) {
+        if (!EliteDangerous.isGameRunning) {
+            return addCors(
+                HttpResponse.newFixedLengthResponse(StandardHttpStatus.FAILED_DEPENDENCY, "Game is not running")
+                    .setMimeType("text/plain")
+            );
+        }
+
+        return addCors(
+            HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, Rson.DEFAULT.toJson(EliteDangerous.getActiveFiles()))
+                .setMimeType("application/json; charset=utf-8")
+        );
+    }
 
     @HttpEndpoint(uri = "/file/:file")
     public HttpResponse onGetFileContent(SoraHttpSession session) throws FileNotFoundException {
         String file = session.getUriParameters().get("file");
 
         if (!EliteDangerous.isGameRunning) {
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.FAILED_DEPENDENCY, "Game is not running")
-                .setMimeType("text/plain");
+            return addCors(
+                HttpResponse.newFixedLengthResponse(StandardHttpStatus.FAILED_DEPENDENCY, "Game is not running")
+                    .setMimeType("text/plain")
+            );
         }
 
         if (!EliteDangerous.getActiveFiles().contains(file)) {
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.NOT_FOUND, "File not found")
-                .setMimeType("text/plain");
+            return addCors(
+                HttpResponse.newFixedLengthResponse(StandardHttpStatus.NOT_FOUND, "File not found")
+                    .setMimeType("text/plain")
+            );
         }
 
         if (file.equals("Journal")) {
-            return HttpResponse.newFixedLengthFileResponse(StandardHttpStatus.OK, EliteDangerous.currentJournal)
-                .setMimeType("application/json; charset=utf-8");
+            return addCors(
+                HttpResponse.newFixedLengthFileResponse(StandardHttpStatus.OK, EliteDangerous.currentJournal)
+                    .setMimeType("application/json; charset=utf-8")
+            );
         } else {
-            return HttpResponse.newFixedLengthFileResponse(StandardHttpStatus.OK, new File(EliteDangerous.GAME_DIR, file + ".json"))
-                .setMimeType("application/json; charset=utf-8");
+            return addCors(
+                HttpResponse.newFixedLengthFileResponse(StandardHttpStatus.OK, new File(EliteDangerous.GAME_DIR, file + ".json"))
+                    .setMimeType("application/json; charset=utf-8")
+            );
         }
-    }
-
-    @HttpEndpoint(uri = "/files")
-    public HttpResponse onListFiles(SoraHttpSession session) {
-        if (!EliteDangerous.isGameRunning) {
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.FAILED_DEPENDENCY, "Game is not running").setMimeType("text/plain");
-        }
-
-        return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, Rson.DEFAULT.toJson(EliteDangerous.getActiveFiles()))
-            .setMimeType("application/json; charset=utf-8");
     }
 
     @WebsocketEndpoint(uri = "/file/:file")

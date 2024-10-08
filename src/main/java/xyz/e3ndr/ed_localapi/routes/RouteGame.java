@@ -17,17 +17,20 @@ import co.casterlabs.sora.api.websockets.annotations.WebsocketEndpoint;
 import xyz.e3ndr.ed_localapi.EliteDangerous;
 import xyz.e3ndr.ed_localapi.EliteDangerous.GameListener;
 
-public class RouteGame implements HttpProvider, WebsocketProvider {
+public class RouteGame extends Helper implements HttpProvider, WebsocketProvider {
     private static final String GAME_OPEN = JsonObject.singleton("isGameRunning", true).toString();
     private static final String GAME_CLOSE = JsonObject.singleton("isGameRunning", false).toString();
 
     @HttpEndpoint(uri = "/game")
     public HttpResponse onGetGameState(SoraHttpSession session) throws FileNotFoundException {
-        return HttpResponse.newFixedLengthResponse(
-            StandardHttpStatus.OK,
-            new JsonObject()
-                .put("isGameRunning", EliteDangerous.isGameRunning)
-        ).setMimeType("application/json; charset=utf-8");
+        return addCors(
+            HttpResponse.newFixedLengthResponse(
+                StandardHttpStatus.OK,
+                new JsonObject()
+                    .put("isGameRunning", EliteDangerous.isGameRunning)
+            )
+                .setMimeType("application/json; charset=utf-8")
+        );
     }
 
     @WebsocketEndpoint(uri = "/game")
